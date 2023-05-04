@@ -80,7 +80,7 @@ export default function RegisterPage(props: RegisterPageProps) {
 
   return (
     <>
-      <div className="mx-auto w-[500px] pt-[150px]">
+      <div className="xl:mx-auto w-[500px] pt-[150px] mx-5">
         <div className="text-center mb-5 flex justify-center">
           <Link to={"/"}>
             <img src="/logo.png" alt="" />
