@@ -51,12 +51,14 @@ export default function LoginPage(props: LoginPageProps) {
 
   const auth = getAuth();
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user || !user.displayName) {
-      return;
-    }
-    navigate("/");
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        return;
+      }
+      navigate("/");
+    });
+  }, [auth, navigate]);
 
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
 

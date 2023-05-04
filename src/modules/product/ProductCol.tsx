@@ -1,6 +1,8 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Cart } from "models";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export interface ProductColProps {
   image: string;
@@ -25,8 +27,29 @@ export function ProductCol({
   id,
 }: ProductColProps) {
   const [addToCart, setAddToCart] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
+
+  const auth = getAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        setIsLoggedIn(false);
+        return;
+      }
+      setIsLoggedIn(true);
+    });
+  }, [auth]);
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast.warning("You are not logged in !");
+      navigate("/login");
+      return;
+    }
+
     setAddToCart(!addToCart);
     if (!addToCart) {
       const mycart = localStorage.getItem("my_cart");

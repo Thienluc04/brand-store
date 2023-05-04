@@ -57,12 +57,14 @@ export function Header() {
 
   const auth = getAuth();
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user || !user.displayName) {
-      return;
-    }
-    setCurrentUser(user);
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        return;
+      }
+      setCurrentUser(user);
+    });
+  }, [auth]);
 
   const handleSignOut = () => {
     signOut(auth);

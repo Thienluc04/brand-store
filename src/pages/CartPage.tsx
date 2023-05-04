@@ -40,12 +40,14 @@ export default function CartPage(props: CartPageProps) {
   const auth = getAuth();
   const navigate = useNavigate();
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user || !user.displayName) {
-      navigate("/");
-      return;
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        navigate("/");
+        return;
+      }
+    });
+  }, [auth, navigate]);
 
   return (
     <div className="bg-[#F7FAFC]">

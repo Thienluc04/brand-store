@@ -56,12 +56,14 @@ export default function RegisterPage(props: RegisterPageProps) {
   const auth = getAuth();
   const navigate = useNavigate();
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user || !user.displayName) {
-      return;
-    }
-    navigate("/");
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        return;
+      }
+      navigate("/");
+    });
+  }, [auth, navigate]);
 
   const [passwordShow, setPasswordShow] = useState<boolean>(false);
 

@@ -2,14 +2,15 @@ import featuresApi from "api/featuresApi";
 import productApi from "api/productApi";
 import { Button } from "components/button";
 import { DiscountBanner, Quantity } from "components/common";
-import { Product } from "models";
+import { Cart, Product } from "models";
 import { Features } from "models/features";
 import { ProductRow } from "modules/product/ProductRow";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import NotFoundPage from "./NotFoundPage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const { v4 } = require("uuid");
 
@@ -61,6 +62,70 @@ export default function DetailPage(props: DetailPageProps) {
     })();
   }, [product]);
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
+
+  const auth = getAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.displayName) {
+        setIsLoggedIn(false);
+        return;
+      }
+      setIsLoggedIn(true);
+    });
+  }, [auth]);
+
+  const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      toast.warning("You are not logged in !");
+      navigate("/login");
+      return;
+    }
+
+    const mycart = localStorage.getItem("my_cart");
+    if (product) {
+      if (mycart) {
+        let isHasItem = false;
+        const arrayPrev: Array<Cart> = Array.from(JSON.parse(mycart));
+        arrayPrev.forEach((item) => {
+          if (item.id === product?.id) {
+            isHasItem = true;
+          }
+        });
+
+        if (!isHasItem) {
+          const newArray: Array<Cart> = [
+            ...arrayPrev,
+            {
+              id: product.id,
+              image: product.image,
+              name: product.name,
+              price: product.price,
+              description: product.description,
+            },
+          ];
+          localStorage.setItem("my_cart", JSON.stringify(newArray));
+          window.location.reload();
+        }
+      } else {
+        const addCart = [
+          {
+            id: product.id,
+            image: product.image,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+          },
+        ];
+        localStorage.setItem("my_cart", JSON.stringify(addCart));
+        window.location.reload();
+      }
+    }
+  };
+
   return (
     <div className="bg-[#F7FAFC] py-10">
       <div className="max-w-[1180px] mx-auto flex flex-col gap-10 max-lg:px-3">
@@ -88,7 +153,7 @@ export default function DetailPage(props: DetailPageProps) {
             )}
             {product ? (
               <div className="flex items-center gap-2">
-                <img src="/images/fourStars.png" alt="" className="max-lg:w-[80px]" />
+                <img src={product?.rating.image} alt="" className="max-lg:w-[80px]" />
                 <span className="text-[#FF9017]">{product?.rating.number}</span>
                 <div className="w-[6px] h-[6px] bg-[#DBDBDB] rounded-full"></div>
                 <p className="text-gray5">{product?.orders} orders</p>
@@ -114,7 +179,9 @@ export default function DetailPage(props: DetailPageProps) {
             <div className="flex mt-5 gap-5">
               {product ? (
                 <>
-                  <Button kind="primary">Add to cart</Button>
+                  <Button onClick={handleAddToCart} kind="primary">
+                    Add to cart
+                  </Button>
                   <Button to="/cart" kind="secondary">
                     Buy now
                   </Button>
