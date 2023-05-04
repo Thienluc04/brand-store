@@ -74,7 +74,7 @@ export default function LoginPage(props: LoginPageProps) {
 
   return (
     <>
-      <div className="xl:mx-auto w-[500px] pt-[150px] mx-5">
+      <div className="mx-auto md:w-[500px] w-[350px] pt-[150px] md:px-0 px-3">
         <div className="text-center mb-5 flex justify-center">
           <Link to={"/"}>
             <img src="/logo.png" alt="" />
