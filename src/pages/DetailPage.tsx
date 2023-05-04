@@ -17,6 +17,10 @@ const { v4 } = require("uuid");
 export interface DetailPageProps {}
 
 export default function DetailPage(props: DetailPageProps) {
+  useEffect(() => {
+    document.title = "Brand Store Detail";
+  }, []);
+
   const [product, setProduct] = useState<Product>();
   const [feature, setFeature] = useState<Features>();
   const [relatedProducts, setRelatedProducts] = useState<Product[]>();

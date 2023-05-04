@@ -17,6 +17,10 @@ const { v4 } = require("uuid");
 export interface HomePageProps {}
 
 export default function HomePage(props: HomePageProps) {
+  useEffect(() => {
+    document.title = "Brand Store Home";
+  }, []);
+
   const dispatch = useAppDispatch();
 
   const listOffers = [

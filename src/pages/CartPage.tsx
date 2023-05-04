@@ -14,6 +14,10 @@ export default function CartPage(props: CartPageProps) {
   const [myCart, setMyCart] = useState<Array<Cart>>([]);
 
   useEffect(() => {
+    document.title = "Brand Store Cart";
+  }, []);
+
+  useEffect(() => {
     if (localStorage.getItem("my_cart")) {
       setMyCart(Array.from(JSON.parse(String(localStorage.getItem("my_cart")))));
     }

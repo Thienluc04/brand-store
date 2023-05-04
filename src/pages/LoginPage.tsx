@@ -23,6 +23,10 @@ const schema = yup.object({
 });
 
 export default function LoginPage(props: LoginPageProps) {
+  useEffect(() => {
+    document.title = "Login";
+  }, []);
+
   const {
     control,
     handleSubmit,

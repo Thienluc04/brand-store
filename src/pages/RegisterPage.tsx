@@ -45,6 +45,10 @@ export default function RegisterPage(props: RegisterPageProps) {
   };
 
   useEffect(() => {
+    document.title = "Register";
+  }, []);
+
+  useEffect(() => {
     if (errors) {
       const error = Object.values(errors);
       const errorMessage: String | undefined = error[0]?.message?.toString();

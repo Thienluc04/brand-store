@@ -27,6 +27,10 @@ const { v4 } = require("uuid");
 export interface ListPageProps {}
 
 export default function ListPage(props: ListPageProps) {
+  useEffect(() => {
+    document.title = "Brand Store List";
+  }, []);
+
   const dispatch = useAppDispatch();
 
   const [isColumn, setIsColumn] = useState(false);
